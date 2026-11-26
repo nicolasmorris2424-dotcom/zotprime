@@ -209,10 +209,14 @@ class Zotero_Tags extends Zotero_ClassicDataObjects {
 				$sql .= "GROUP BY tags.tagID ORDER BY COUNT(tags.tagID)";
 			}
 			else {
+				if (!preg_match('/^[a-zA-Z0-9_]+$/', $order)) {
+					throw new \InvalidArgumentException('Invalid input');
+				}
 				$sql .= "ORDER BY $order ";
 			}
 			if (!empty($params['direction'])) {
-				$sql .= " " . $params['direction'] . " ";
+				$direction = strtoupper((string) $params['direction']) === 'DESC' ? 'DESC' : 'ASC';
+				$sql .= " " . $direction . " ";
 			}
 		}
 		
